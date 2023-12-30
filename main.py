@@ -7,13 +7,6 @@ from src.generate_fake_data.main import FakeGenerate
 
 def main() -> None:
     fake = FakeGenerate()
-    # aux = 5
-    # while aux !=0:
-    #     print(fake.generate_data_fake())
-    #     time.sleep(3)
-    #     aux -=1
-
-
 
     conf = {
         'bootstrap.servers': 'localhost:9092',
@@ -21,10 +14,15 @@ def main() -> None:
     }
 
     producer = Producer(conf)
-    topic = 'demo-test-1'
+    topic = 'demo-fake-data'
 
-    producer.produce(topic, key="key", value=fake.generate_data_fake())
-    producer.flush()
+    qt_exec_test = 0
+    while True:
+        producer.produce(topic, key="key", value=fake.generate_data_fake())
+        producer.flush()
+        qt_exec_test += 1
+        print(f"Message {qt_exec_test} Sent")
+        time.sleep(3)
 
 if __name__ == "__main__":
     main()
